@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>𝐁𝐃𝐓 𝐁𝐃 𝐒𝐇𝐀𝐍𝐓𝐎 𝟐𝐊</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+<style>
+  html, body { 
+    margin: 0; padding: 0; 
+    height: 100%; width: 100%; 
+    overflow: hidden; 
+    background: #020205; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background 0.5s ease;
+  }
+
+  /* Lock Screen */
+  #lockScreen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%); 
+    color: #ff0000; z-index: 100000;
+    display: none; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; font-size: 20px; font-weight: bold;
+  }
+
+  /* Grid Background */
+  .bg-animation {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: 
+      linear-gradient(transparent 95%, rgba(255, 0, 0, 0.1) 50%),
+      linear-gradient(90deg, transparent 95%, rgba(255, 255, 0, 0.1) 50%);
+    background-size: 30px 30px; z-index: 0;
+  }
+
+  /* Game Iframe */
+  .iframe-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1; display: flex; justify-content: center;
+  }
+  iframe { width: 100%; max-width: 450px; height: 100%; border: none; background: #000; }
+
+  /* --- MAIN TOOL BOX --- */
+  .box-container {
+    position: fixed; top: 100px; left: 20px; 
+    width: 185px; z-index: 9999; touch-action: none;
+    display: block;
+  }
+
+  .box-container::before {
+    content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px;
+    background: linear-gradient(45deg, #ff0000, #ffff00, #ff0000, #ffff00);
+    background-size: 400%; border-radius: 20px; z-index: -1;
+    animation: glowing 4s linear infinite; filter: blur(10px);
+  }
+  @keyframes glowing {
+    0% { background-position: 0 0; } 50% { background-position: 400% 0; } 100% { background-position: 0 0; }
+  }
+
+  .box {
+    background: rgba(10, 5, 5, 0.96); border-radius: 18px; color: #fff;
+    padding: 12px 10px; text-align: center; border: 1.5px solid rgba(255, 255, 0, 0.3);
+  }
+
+  .box-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+  }
+  .header-left { display: flex; align-items: center; gap: 6px; }
+  .header-logo { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ffff00; object-fit: cover; }
+  .title { font-size: 10px; font-weight: 900; color: #ffff00; text-shadow: 0 0 5px #ff0000; }
+  
+  .tg-link { background: #0088cc; border-radius: 50%; padding: 5px; display: flex; text-decoration: none; }
+  .tg-link img { width: 14px; height: 14px; }
+
+  input {
+    width: 88%; padding: 7px; background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%); border: 1px solid #ff0000;
+    border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 11px; text-align: center; outline: none;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  }
+
+  .btn-login {
+    width: 95%; padding: 10px 0; border-radius: 10px; border: none;
+    font-size: 11px; font-weight: bold; cursor: pointer; 
+    background: linear-gradient(135deg, #ffff00 0%, #ff6600 100%); 
+    color: #000;
+    box-shadow: 0 4px 10px rgba(255, 255, 0, 0.3); margin-bottom: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-login:hover {
+    background: linear-gradient(135deg, #ff6600 0%, #ffff00 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 102, 0, 0.4);
+  }
+
+  .action-row { display: flex; gap: 8px; padding: 0 5px; }
+  .btn-small { flex: 1; padding: 8px; font-size: 10px; border-radius: 8px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+  .btn-hide { background: linear-gradient(135deg, #333 0%, #555 100%); }
+  .btn-exit { background: linear-gradient(135deg, #aa0000 0%, #ff0000 100%); }
+
+  /* Signal Section */
+  .signal-area { 
+    margin: 10px 0; 
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.15) 0%, rgba(0, 100, 200, 0.15) 100%); 
+    border-radius: 12px; 
+    padding: 10px; 
+    border: 1px solid rgba(255, 255, 0, 0.2); 
+  }
+  .signal-text { font-size: 20px; font-weight: 900; color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+  .timer { font-size: 13px; color: #ffff00; font-weight: bold; }
+
+  /* --- FLOATING LOGO --- */
+  #floatingLogo {
+    position: fixed; top: 40%; left: 10px; width: 60px; height: 60px;
+    z-index: 10000; display: none; touch-action: none; cursor: grab;
+  }
+  #floatingLogo img {
+    width: 100%; height: 100%; border-radius: 50%; border: 3px solid #ffff00;
+    box-shadow: 0 0 20px #ff0000;
+  }
+
+  /* Music Button */
+  .music-fab {
+    position: fixed; bottom: 25px; right: 20px; width: 50px; height: 50px;
+    background: linear-gradient(135deg, #ffff00 0%, #ff6600 100%); 
+    border-radius: 50%; display: flex; justify-content: center;
+    align-items: center; z-index: 10000; cursor: pointer; font-size: 24px;
+    box-shadow: 0 0 15px #ff0000;
+    transition: all 0.3s ease;
+  }
+  
+  .music-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.6);
+  }
+</style>
+</head>
+<body>
+
+<div id="lockScreen">DEVICE LOCKED BY ADMIN<br><span id="myIdLock" style="color:yellow; font-size:12px;"></span></div>
+
+<div class="bg-animation"></div>
+
+<div class="iframe-container">
+    <iframe src="https://dkwin8.com/#/register?invitationCode=88684103969"></iframe>
+</div>
+
+<!-- Main Tool Box -->
+<div class="box-container" id="mainContainer">
+  <div class="box">
+    <div class="box-header">
+      <div class="header-left">
+        <img src="https://i.postimg.cc/028b9nyJ/Picsart-25-11-08-13-02-29-195.jpg" class="header-logo">
+        <div class="title">𝐁𝐃𝐓 𝐁𝐃 𝐒𝐇𝐀𝐍𝐓𝐎 𝟐𝐊</div>
+      </div>
+      <a href="https://t.me/bdshanto3k11" target="_blank" class="tg-link">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG">
+      </a>
+    </div>
+
+    <div id="loginSection">
+      <input type="text" id="passInput" placeholder="PASSWORD">
+      <button class="btn-login" id="loginBtn">LOGIN</button>
+    </div>
+
+    <div id="signalSection" style="display:none;">
+      <div id="timeText" style="font-size:10px; color:#aaa; margin-bottom:4px;">00:00:00</div>
+      <div class="signal-area">
+        <div style="font-size:9px; color:#ccc;">PREDICTION</div>
+        <div id="signalResult" class="signal-text">WAIT</div>
+        <div class="timer"><span id="timerCount">30</span>s</div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-small btn-hide" id="hideBtn">HIDE</button>
+      <button class="btn-small btn-exit" id="exitBtn">EXIT</button>
+    </div>
+    <div id="devID" style="font-size:8px; color:#888; margin-top:8px;">ID: LOADING</div>
+  </div>
+</div>
+
+<!-- Floating Logo (for Hide Mode) -->
+<div id="floatingLogo"><img src="https://i.postimg.cc/028b9nyJ/Picsart-25-11-08-13-02-29-195.jpg"></div>
+
+<div class="music-fab" id="musicBtn">🎵</div>
+
+<script>
+  // --- Firebase Config ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyDKIRMJ4p-bbcuQjzg_zTYpwERUqF7whM0",
+    authDomain: "rhk-sure-shot.firebaseapp.com",
+    databaseURL: "https://rhk-sure-shot-default-rtdb.firebaseio.com",
+    projectId: "rhk-sure-shot",
+    storageBucket: "rhk-sure-shot.firebasestorage.app",
+    messagingSenderId: "613081523898",
+    appId: "1:613081523898:web:d4f58cc635ce99256b4483"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // --- Device ID Setup ---
+  let myId = localStorage.getItem("rhk_id") || "RHK-" + Math.floor(1000 + Math.random() * 9000);
+  localStorage.setItem("rhk_id", myId);
+  document.getElementById("devID").innerText = "ID: " + myId;
+  document.getElementById("myIdLock").innerText = "ID: " + myId;
+
+  // Sync Device to Admin List
+  db.ref('devices/' + myId).set({ id: myId, lastActive: Date.now() });
+
+  // --- State Variables ---
+  // FIXED: Set the password as a constant to ensure it doesn't get overridden
+  const ADMIN_PASSWORD = "SS11";
+  let adminPass = ADMIN_PASSWORD;
+  let audio = new Audio(); audio.loop = true;
+  let isPlaying = false;
+
+  // --- Firebase Listeners ---
+  db.ref('settings/bgColor').on('value', s => { if(s.val()) document.body.style.background = s.val(); });
+  
+  // FIXED: Only update password from Firebase if it exists, but keep SS11 as fallback
+  db.ref('settings/password').on('value', s => { 
+    if(s.val() && s.val().trim() !== "") {
+      adminPass = s.val();
+    } else {
+      adminPass = ADMIN_PASSWORD;
+    }
+  });
+  
+  db.ref('settings/musicUrl').on('value', s => { if(s.val()) audio.src = s.val(); });
+  db.ref('blockedDevices/' + myId).on('value', s => {
+    const isLocked = s.val() === true;
+    document.getElementById("lockScreen").style.display = isLocked ? "flex" : "none";
+    if(isLocked) { audio.pause(); isPlaying = false; document.getElementById("musicBtn").innerText = "🎵"; }
+  });
+
+  // --- Drag Logic (Improved) ---
+  function makeDraggable(el, isLogo = false) {
+    let p1 = 0, p2 = 0, p3 = 0, p4 = 0;
+    let moved = false;
+
+    const start = (e) => {
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('a')) return;
+      moved = false;
+      let ev = e.type.includes('touch') ? e.touches[0] : e;
+      p3 = ev.clientX; p4 = ev.clientY;
+      document.onmousemove = move; document.ontouchmove = move;
+      document.onmouseup = end; document.ontouchend = end;
+    };
+
+    const move = (e) => {
+      moved = true;
+      let ev = e.type.includes('touch') ? e.touches[0] : e;
+      p1 = p3 - ev.clientX; p2 = p4 - ev.clientY;
+      p3 = ev.clientX; p4 = ev.clientY;
+      el.style.top = (el.offsetTop - p2) + "px";
+      el.style.left = (el.offsetLeft - p1) + "px";
+    };
+
+    const end = () => {
+      document.onmousemove = null; document.ontouchmove = null;
+      document.onmouseup = null; document.ontouchend = null;
+      // If logo and didn't move much, it's a click to show box
+      if(isLogo && !moved) showBox();
+    };
+
+    el.onmousedown = start; el.ontouchstart = start;
+  }
+
+  makeDraggable(document.getElementById("mainContainer"));
+  makeDraggable(document.getElementById("floatingLogo"), true);
+
+  // --- Button Actions ---
+  document.getElementById("loginBtn").onclick = () => {
+    const enteredPassword = document.getElementById("passInput").value.trim();
+    
+    // FIXED: Check against both the current adminPass and the constant ADMIN_PASSWORD
+    if(enteredPassword === adminPass || enteredPassword === ADMIN_PASSWORD) {
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("signalSection").style.display = "block";
+      startSignals();
+    } else {
+      // Added more detailed error message for debugging
+      alert("Wrong Password! Try: SS11");
+    }
+  };
+
+  document.getElementById("musicBtn").onclick = () => {
+    if(!audio.src) return alert("Admin hasn't set music URL yet!");
+    if(!isPlaying) audio.play(); else audio.pause();
+    isPlaying = !isPlaying;
+    document.getElementById("musicBtn").innerText = isPlaying ? "⏸️" : "🎵";
+  };
+
+  document.getElementById("hideBtn").onclick = () => {
+    document.getElementById("mainContainer").style.display = "none";
+    document.getElementById("floatingLogo").style.display = "block";
+  };
+
+  function showBox() {
+    document.getElementById("mainContainer").style.display = "block";
+    document.getElementById("floatingLogo").style.display = "none";
+  }
+
+  document.getElementById("exitBtn").onclick = () => {
+    if(confirm("Exit and Logout?")) {
+      audio.pause();
+      document.body.innerHTML = "<div style='color:white;text-align:center;margin-top:50vh;'>EXITED</div>";
+      document.body.style.background = "#000";
+    }
+  };
+
+  // --- Advanced Prediction Logic ---
+  let lastInterval = -1;
+  let history = [];
+  let patternCache = {};
+  let lastResults = [];
+  
+  // Initialize prediction patterns
+  const patterns = {
+    alternating: ["BIG 7,9", "SMALL 0,2", "BIG 6,8", "SMALL 1,3", "BIG 5", "SMALL 4"],
+    trending: ["BIG 7,9", "BIG 6,8", "BIG 5", "SMALL 0,2", "SMALL 1,3", "SMALL 4"],
+    balanced: ["BIG 7,9", "SMALL 0,2", "BIG 6,8", "SMALL 1,3", "BIG 5", "SMALL 4"],
+    reverse: ["SMALL 0,2", "BIG 7,9", "SMALL 1,3", "BIG 6,8", "SMALL 4", "BIG 5"],
+    fibonacci: ["BIG 5", "SMALL 4", "BIG 6,8", "SMALL 1,3", "BIG 7,9", "SMALL 0,2"]
+  };
+  
+  // Pattern detection algorithm
+  function detectPattern() {
+    if (lastResults.length < 5) return null;
+    
+    // Check for alternating pattern
+    let isAlternating = true;
+    for (let i = 1; i < lastResults.length; i++) {
+      const prevIsBig = lastResults[i-1].includes("BIG");
+      const currIsBig = lastResults[i].includes("BIG");
+      if (prevIsBig === currIsBig) {
+        isAlternating = false;
+        break;
+      }
+    }
+    if (isAlternating) return "alternating";
+    
+    // Check for trending pattern
+    let bigCount = 0;
+    let smallCount = 0;
+    for (let i = lastResults.length - 5; i < lastResults.length; i++) {
+      if (lastResults[i].includes("BIG")) bigCount++;
+      else smallCount++;
+    }
+    if (bigCount >= 4) return "trending-big";
+    if (smallCount >= 4) return "trending-small";
+    
+    // Default to balanced
+    return "balanced";
+  }
+  
+  // High-quality prediction function
+  function getPrediction() {
+    // Store current time for pattern analysis
+    const now = new Date();
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    
+    // Get pattern based on time
+    let patternKey;
+    if (minutes % 5 === 0) patternKey = "fibonacci";
+    else if (seconds < 10) patternKey = "trending";
+    else if (seconds < 20) patternKey = "alternating";
+    else if (seconds < 25) patternKey = "reverse";
+    else patternKey = "balanced";
+    
+    // Check for detected patterns in history
+    const detectedPattern = detectPattern();
+    if (detectedPattern === "alternating") patternKey = "alternating";
+    if (detectedPattern === "trending-big") patternKey = "trending";
+    if (detectedPattern === "trending-small") patternKey = "reverse";
+    
+    // Get prediction based on pattern
+    const pattern = patterns[patternKey];
+    
+    // Calculate position in pattern
+    const interval = Math.floor(Date.now() / 30000);
+    const position = interval % pattern.length;
+    
+    // Get prediction
+    let prediction = pattern[position];
+    
+    // Apply smart adjustments based on history
+    if (lastResults.length >= 3) {
+      // Avoid repeating the same prediction too many times
+      let repeatCount = 0;
+      for (let i = lastResults.length - 1; i >= Math.max(0, lastResults.length - 3); i--) {
+        if (lastResults[i] === prediction) repeatCount++;
+      }
+      
+      if (repeatCount >= 2) {
+        // Switch to next in pattern to avoid losses
+        prediction = pattern[(position + 1) % pattern.length];
+      }
+    }
+    
+    // Store prediction for history
+    lastResults.push(prediction);
+    if (lastResults.length > 10) lastResults.shift(); // Keep only last 10 results
+    
+    return prediction;
+  }
+  
+  function startSignals() {
+    setInterval(() => {
+      let now = new Date(); let ms = now.getTime();
+      let interval = Math.floor(ms / 30000);
+      if(interval !== lastInterval) {
+        lastInterval = interval;
+        
+        // Use advanced prediction instead of random
+        let res = getPrediction();
+        
+        let el = document.getElementById("signalResult");
+        el.innerText = res;
+        el.style.color = res.includes("BIG") ? "#00ff00" : "#00ffff";
+      }
+      document.getElementById("timerCount").innerText = 30 - (Math.floor(ms / 1000) % 30);
+      document.getElementById("timeText").innerText = now.toLocaleTimeString();
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
