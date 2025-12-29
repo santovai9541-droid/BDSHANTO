@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GX VIP HACK  </title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    #predictionBox {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #1a0033; /* Dark purple background */
+        padding: 12px 16px;
+        border-radius: 16px;
+        color: #fff;
+        font-size: 15px;
+        font-weight: bold;
+        width: 180px;
+        text-align: center;
+        border: 2px solid #9d4edd; /* Purple border */
+        box-shadow: 0 0 15px #9d4edd88; /* Purple glow */
+        z-index: 99999;
+        cursor: grab;
+        user-select: none;
+        transition: width 0.5s ease, padding 0.5s ease;
+    }
+
+    #boxTitle {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #e0aaff; /* Light purple text */
+        text-shadow: 
+            0 0 5px #e0aaff, 
+            0 0 10px #e0aaff, 
+            0 0 20px #9d4edd, 
+            0 0 30px #9d4edd, 
+            0 0 40px #7b2cbf;
+    }
+
+    .big { color: #e0aaff; } /* Light purple */
+    .small { color: #c77dff; } /* Medium purple */
+    .green { color: #9d4edd; } /* Purple */
+    .red { color: #7209b7; } /* Deep purple */
+
+    .period { font-size: 12px; margin-top: 3px; color: #ccc; }
+    .timer { font-size: 14px; margin-top: 5px; color: #e0aaff; font-weight: bold; } /* Made timer more prominent */
+
+    #loginForm input {
+        width: 140px;
+        padding: 4px;
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 6px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+
+    #loginForm button {
+        padding: 4px 8px;
+        border-radius: 8px;
+        border: none;
+        background: #9d4edd; /* Purple button */
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #loginForm button:hover {
+        background: #7b2cbf; /* Darker purple on hover */
+        transform: scale(1.05);
+    }
+
+    #toast {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #9d4edd88; /* Purple glow */
+        font-weight: bold;
+        display: none;
+        z-index: 100000;
+        opacity: 0.95;
+    }
+
+    #toast.success { background: #9d4edd; color: #fff; } /* Purple toast */
+    #toast.error { background: #7209b7; color: #fff; } /* Deep purple toast */
+</style>
+</head>
+<body>
+
+<iframe src="https://dkwin9.com/#/register?invitationCode=45555909939"></iframe>
+
+<div id="predictionBox">
+    <div id="boxTitle">GX  NIROB VIP </div>
+
+    <div id="loginForm">
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+        <br>
+        <button id="loginBtn">Login</button>
+    </div>
+
+    <div id="predictionUI" style="display:none;">
+        <div id="bsText" class="big">BIG</div>
+        <div id="colorText" class="green">GREEN</div>
+        <div id="period" class="period">Period: --</div>
+        <div id="timer" class="timer">00:00</div>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================= ULTRA SMART PREDICTION ================= */
+function ultraSmartPrediction() {
+    const bsRand = Math.random();
+    const bigSmall = (bsRand < 0.58) ? "BIG" : "SMALL";
+
+    let number;
+    if (bigSmall === "BIG") {
+        const nums = [5,6,7,8,9];
+        number = nums[Math.floor(Math.random() * nums.length)];
+    } else {
+        const nums = [0,1,2,3,4];
+        number = nums[Math.floor(Math.random() * nums.length)];
+    }
+
+    const color = (number % 2 === 0) ? "GREEN" : "RED";
+
+    return { bigSmall, number, color };
+}
+
+/* ================== 30-SECOND PERIOD GENERATOR ================== */
+function generatePeriod() {
+    const now = new Date();
+    const istOffset = 5.5 * 60;
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const istTime = new Date(utc + (istOffset * 60000));
+
+    const hours = istTime.getHours();
+    const minutes = istTime.getMinutes();
+    const seconds = istTime.getSeconds();
+
+    const startHour = 5;
+    const startMinute = 30;
+
+    let elapsedSeconds = (hours * 3600 + minutes * 60 + seconds) -
+                         (startHour * 3600 + startMinute * 60);
+    if (elapsedSeconds < 0) elapsedSeconds = 0;
+
+    const totalPeriods = Math.floor(elapsedSeconds / 30);
+    const upcomingPeriod = totalPeriods + 1;
+
+    const yyyy = istTime.getFullYear();
+    const mm = String(istTime.getMonth() + 1).padStart(2, '0');
+    const dd = String(istTime.getDate()).padStart(2, '0');
+    const datePart = `${yyyy}${mm}${dd}`;
+    const periodNumber = "100005" + String(upcomingPeriod).padStart(4, '0');
+
+    return datePart + periodNumber;
+}
+
+/* ================== TIMER ================== */
+function updateTimer() {
+    const now = new Date();
+    const istOffset = 5.5 * 60;
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const istTime = new Date(utc + (istOffset * 60000));
+    const seconds = istTime.getSeconds();
+    const remainingSeconds = 30 - (seconds % 30);
+    document.getElementById("timer").innerText = `00:${String(remainingSeconds).padStart(2,'0')}`;
+}
+
+/* ================== FIXED RESULT PER PERIOD ================== */
+let currentPeriod = "";
+let currentResult = ultraSmartPrediction();
+
+function updatePredictionAndPeriod() {
+    const newPeriod = generatePeriod();
+
+    if(newPeriod !== currentPeriod){
+        currentPeriod = newPeriod;
+        currentResult = ultraSmartPrediction();
+    }
+
+    document.getElementById("period").innerText = "Period: " + currentPeriod;
+
+    const bs = document.getElementById("bsText");
+    bs.innerText = currentResult.bigSmall;
+    bs.className = (currentResult.bigSmall === "BIG") ? "big" : "small";
+
+    const ct = document.getElementById("colorText");
+    ct.innerText = currentResult.color;
+    ct.className = (currentResult.color === "GREEN") ? "green" : "red";
+
+    // Removed the numberText update line
+    
+    updateTimer();
+}
+
+/* ================== TOAST ================== */
+function showToast(message, type) {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.className = type;
+    toast.style.display = "block";
+    setTimeout(() => toast.style.display = "none", 2000);
+}
+
+/* ================== LOGIN ================== */
+const loginBtn = document.getElementById("loginBtn");
+const passwordInput = document.getElementById("passwordInput");
+const loginForm = document.getElementById("loginForm");
+const predictionUI = document.getElementById("predictionUI");
+const boxTitle = document.getElementById("boxTitle");
+const predictionBox = document.getElementById("predictionBox");
+
+loginBtn.addEventListener("click", () => {
+    if(passwordInput.value === "GX611188"){
+        showToast("Login Successful!", "success");
+        loginForm.style.display = "none";
+        boxTitle.style.display = "none";
+        predictionUI.style.display = "block";
+
+        predictionBox.style.width = "140px";
+        predictionBox.style.padding = "8px 10px";
+
+        updatePredictionAndPeriod();
+        setInterval(updatePredictionAndPeriod, 1000);
+    } else {
+        showToast("Invalid Password!", "error");
+        passwordInput.value = "";
+    }
+});
+
+/* ================== DRAGGABLE BOX ================== */
+let drag = false, dx = 0, dy = 0;
+
+predictionBox.addEventListener("mousedown", e => {
+    drag = true;
+    dx = e.clientX - predictionBox.offsetLeft;
+    dy = e.clientY - predictionBox.offsetTop;
+});
+document.addEventListener("mousemove", e => {
+    if (!drag) return;
+    predictionBox.style.left = e.clientX - dx + "px";
+    predictionBox.style.top = e.clientY - dy + "px";
+    predictionBox.style.bottom = "auto";
+    predictionBox.style.right = "auto";
+});
+document.addEventListener("mouseup", () => drag = false);
+
+predictionBox.addEventListener("touchstart", e => {
+    drag = true;
+    let t = e.touches[0];
+    dx = t.clientX - predictionBox.offsetLeft;
+    dy = t.clientY - predictionBox.offsetTop;
+});
+document.addEventListener("touchmove", e => {
+    if (!drag) return;
+    let t = e.touches[0];
+    predictionBox.style.left = t.clientX - dx + "px";
+    predictionBox.style.top = t.clientY - dy + "px";
+    predictionBox.style.bottom = "auto";
+    predictionBox.style.right = "auto";
+});
+document.addEventListener("touchend", () => drag = false);
+</script>
+
+</body>
+</html>
